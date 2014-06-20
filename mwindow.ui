@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MWindow</class>
+ <widget class="QMainWindow" name="MWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>755</width>
+    <height>524</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>755</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Archivo">
+    <property name="title">
+     <string>&amp;Archivo</string>
+    </property>
+    <addaction name="action_Nuevo"/>
+    <addaction name="action_Abrir"/>
+    <addaction name="action_Guardar_Como"/>
+    <addaction name="actionCerrar_Bade_de_Datos"/>
+    <addaction name="action_Salir"/>
+   </widget>
+   <widget class="QMenu" name="menuOpciones">
+    <property name="title">
+     <string>&amp;Opciones de Base de Datos</string>
+    </property>
+    <addaction name="actionNueva_Tabla"/>
+   </widget>
+   <widget class="QMenu" name="menuA_yuda">
+    <property name="title">
+     <string>A&amp;yuda</string>
+    </property>
+    <addaction name="actionAcerca_de_JC_s_Access"/>
+   </widget>
+   <addaction name="menu_Archivo"/>
+   <addaction name="menuOpciones"/>
+   <addaction name="menuA_yuda"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="action_Nuevo">
+   <property name="text">
+    <string>&amp;Nuevo...</string>
+   </property>
+  </action>
+  <action name="action_Abrir">
+   <property name="text">
+    <string>&amp;Abrir..</string>
+   </property>
+  </action>
+  <action name="action_Guardar_Como">
+   <property name="text">
+    <string>&amp;Guardar Como...</string>
+   </property>
+  </action>
+  <action name="actionCerrar_Bade_de_Datos">
+   <property name="text">
+    <string>Cerrar Bade de Datos</string>
+   </property>
+  </action>
+  <action name="action_Salir">
+   <property name="text">
+    <string>&amp;Salir</string>
+   </property>
+  </action>
+  <action name="actionNueva_Tabla">
+   <property name="text">
+    <string>&amp;Nueva Tabla</string>
+   </property>
+  </action>
+  <action name="actionAcerca_de_JC_s_Access">
+   <property name="text">
+    <string>Acerca de JC's Access</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
