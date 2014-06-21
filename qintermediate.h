@@ -11,12 +11,20 @@ class QIntermediate : public QWidget
 public:
     explicit QIntermediate(QWidget *parent = 0);
 
-    QString getAFilename(QString message, QString Title);
-    QString getAName(QString message);
+    QString getAFilename(QWidget*parent, QString message, int type, bool &ok);
+    QString getAName(QWidget *parent,QString message, QString title);
+    void createDataBaseFile(QString, QString);
+    void readDataBaseFile(QString);
     QList<QString> getFields(QWidget *parent);
+    void setActiveFile(QString);
+    QString getActiveDataBaseName();
+    bool isWorking(){return activeFile.isEmpty();}
 
 private:
     Controller engine;
+    QString activeFile;
+    MasterBlock masterBlock;
+
 signals:
 
 public slots:

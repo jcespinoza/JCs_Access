@@ -16,12 +16,16 @@ SOURCES += main.cpp\
         mwindow.cpp \
     controller.cpp \
     qintermediate.cpp \
-    addfieldsdialog.cpp
+    addfieldsdialog.cpp \
+    GeneralHashFunctions.cpp \
+    masterblock.cpp
 
 HEADERS  += mwindow.h \
     controller.h \
     qintermediate.h \
-    addfieldsdialog.h
+    addfieldsdialog.h \
+    GeneralHashFunctions.h \
+    masterblock.h
 
 FORMS    += mwindow.ui \
     addfieldsdialog.ui

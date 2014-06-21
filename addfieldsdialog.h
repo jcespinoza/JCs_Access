@@ -20,11 +20,8 @@ public:
 
 private slots:
     void on_buttonBox_accepted();
-
     void on_cboFieldType_currentIndexChanged(int index);
-
     void on_leFieldSize_editingFinished();
-
     void on_leFieldName_editingFinished();
 
 private:

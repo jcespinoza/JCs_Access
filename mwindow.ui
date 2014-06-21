@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MWindow</string>
+   <string>JC's Access</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QStackedWidget" name="stackedWidget">
@@ -26,7 +26,7 @@
     <property name="currentIndex">
      <number>2</number>
     </property>
-    <widget class="QWidget" name="page">
+    <widget class="QWidget" name="pgWelcome">
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
@@ -97,7 +97,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page_2">
+    <widget class="QWidget" name="pgTableSelection">
      <widget class="QListWidget" name="lwTables">
       <property name="geometry">
        <rect>
@@ -143,7 +143,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page_3">
+    <widget class="QWidget" name="pgStatistics">
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
@@ -258,7 +258,7 @@
   </action>
   <action name="actionCerrar_Bade_de_Datos">
    <property name="text">
-    <string>Cerrar Bade de Datos</string>
+    <string>Cerrar Base de Datos</string>
    </property>
   </action>
   <action name="action_Salir">

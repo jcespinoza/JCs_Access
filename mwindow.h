@@ -17,8 +17,8 @@ public:
     ~MWindow();
 
 private slots:
+    void showWelcomeScreen();
     void on_pbNewDataBase_clicked();
-
     void on_pbOpenDataBase_clicked();
 
 private:
