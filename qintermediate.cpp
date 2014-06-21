@@ -30,6 +30,11 @@ QString QIntermediate::getAName(QWidget *parent,QString message, QString title)
     return ans;
 }
 
+QList<QString> QIntermediate::requestInfo(QString)
+{
+
+}
+
 void QIntermediate::createDataBaseFile(QString filename, QString dbName)
 {
     engine.createNewFile(filename.toStdString(), dbName.toStdString());

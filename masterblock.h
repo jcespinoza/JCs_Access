@@ -22,7 +22,7 @@ public:
     int getBlockSize() const{return blockSize;}
     int getFirstDefTableBlock() const {return firstDefTableBlock;}
     int getActiveDefTableBlock() const{return activeDefTableBlock;}
-    string getDataBaseName() const {cout << "\n " << databaseName << " \n"; return string(databaseName);}
+    string getDataBaseName() const { return string(databaseName);}
 
 private:
     int numberOfBlocks;

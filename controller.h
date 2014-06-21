@@ -16,6 +16,8 @@ public:
     void updateMasterBlock(string filename, MasterBlock&);
     void readMasterBlock(string filename, MasterBlock&);
     void createNewFile(string filename, string name, int blockSize = 4096);
+    void readTableList(string filename, MasterBlock&);
+    void read
 
 private:
     MasterBlock master;
