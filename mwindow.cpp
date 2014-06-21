@@ -12,3 +12,13 @@ MWindow::~MWindow()
 {
     delete ui;
 }
+
+void MWindow::on_pbNewDataBase_clicked()
+{
+
+}
+
+void MWindow::on_pbOpenDataBase_clicked()
+{
+
+}

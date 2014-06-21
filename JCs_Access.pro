@@ -13,8 +13,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mwindow.cpp
+        mwindow.cpp \
+    controller.cpp \
+    qintermediate.cpp \
+    addfieldsdialog.cpp
 
-HEADERS  += mwindow.h
+HEADERS  += mwindow.h \
+    controller.h \
+    qintermediate.h \
+    addfieldsdialog.h
 
-FORMS    += mwindow.ui
+FORMS    += mwindow.ui \
+    addfieldsdialog.ui
