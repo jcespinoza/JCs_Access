@@ -49,7 +49,6 @@ list<TableDefinition> Controller::readTableList(string filename, MasterBlock &ma
 
     FILE* dbFile = fopen(filename.c_str(), "rb");
     char* block = new char[master.getBlockSize()];
-    char* tblock = new char[TableDefinition::getSize()];
     TableDefinition tempT;
     while(currentIndex != -1){
         fseek(dbFile, currentIndex*master.getBlockSize(), SEEK_SET);
@@ -59,7 +58,7 @@ list<TableDefinition> Controller::readTableList(string filename, MasterBlock &ma
         memcpy(&currentIndex, &block[4], 4);
         for(int i = 0; i < ntablas; i++){
             tempT.fromByteArray(&block[12+i*tempT.getSize()], tempT.getSize());
-            qDebug() << "TAble Name: " << QString::fromStdString(tempT.getName());
+            qDebug() << "Table Name: " << QString::fromStdString(tempT.getName());
             TableDefinition newOne = tempT;
             tables.push_back(newOne);
         }

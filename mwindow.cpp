@@ -23,17 +23,17 @@ void MWindow::showWelcomeScreen()
 
 void MWindow::showStatistics()
 {
+    ui->lwTablesList->clear();
+    handler.clearWidget(ui->twFieldsDefinition);
     handler.readDataBaseFile(handler.getActiveFile());
     ui->stackedWidget->setCurrentWidget(ui->pgStatistics);
     ui->lbDataBaseName->setText(handler.getActiveDataBaseName());
     QList<QString> info = handler.requestInfo(handler.getActiveFile());
     ui->lbDataBaseName->setText(info.at(0));
     ui->lbNumberOfTables->setText(info.at(1));
-    qDebug() << "info count" << info.count();
+
     for(int i = 2; i < info.count(); i++){
         ui->lwTablesList->addItem(info.at(i));
-        ui->lwTables->addItem(info.at(i));
-        qDebug()<< "TABLE i: " << info.at(i);
     }
 }
 
@@ -116,6 +116,7 @@ void MWindow::on_pbAddField_clicked()
     if(fields.isEmpty()) return;
     FieldDefinition def( fields[0].toInt(), fields[1].toInt(), fields[2].toInt(), fields[3].toStdString());
     fields[2] = (def.isKey())?"Si":"No";
+    fields[0] = (def.getFieldType()==0)?"Entero":"Caracteres";
     if(def.isKey() && !handler.canAcceptKeyFields()){
         QMessageBox::warning(this,"Multiple Llave no soportado", "Usted ya selecciono un campo llave",QMessageBox::Ok);
         return;
@@ -168,6 +169,5 @@ void MWindow::on_pbAcceptFieldDefinition_clicked()
     //increment the block count in the master properties
     //numberOfBlocks, numberOfTAbleBlocks and numberOffieldBlocks
     //reset the handler state so it doesnt store old information
-    handler.resetHandlerState();
-    ui->twFieldsDefinition->clearContents();
+    showStatistics();
 }

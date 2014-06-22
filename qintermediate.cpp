@@ -109,6 +109,13 @@ QList<QString> QIntermediate::getFields(QWidget *parent)
     return fieldList;
 }
 
+void QIntermediate::clearWidget(QTableWidget *tw)
+{
+    while(tw->rowCount() > 0){
+        tw->removeRow(tw->rowCount()-1);
+    }
+}
+
 void QIntermediate::setActiveFile(QString filename)
 {
     this->activeFile = filename;

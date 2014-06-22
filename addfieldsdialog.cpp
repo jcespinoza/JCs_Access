@@ -34,6 +34,7 @@ void AddFieldsDialog::on_cboFieldType_currentIndexChanged(int index)
     }else{
         type = 1;
         ui->leFieldSize->setEnabled(true);
+        ui->leFieldSize->setText("50");
         ui->rbKeyYes->setEnabled(true);
     }
 }

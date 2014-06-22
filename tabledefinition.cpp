@@ -18,7 +18,7 @@ TableDefinition::TableDefinition()
 }
 
 string TableDefinition::getName() const{
-    cout << "\nReturning " << name << " which should equal to " << tableName;
+    cout << "\nReturning " << name << " which should be equal to " << tableName;
     return name;
 }
 

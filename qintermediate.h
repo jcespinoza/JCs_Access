@@ -2,7 +2,7 @@
 #define QINTERMEDIATE_H
 #include "controller.h"
 #include <QList>
-
+#include <QTableWidget>
 #include <QWidget>
 
 class QIntermediate : public QWidget
@@ -14,6 +14,7 @@ public:
     QString getAFilename(QWidget*parent, QString message, int type, bool &ok);
     QString getAName(QWidget *parent,QString message, QString title);
     QList<QString> getFields(QWidget *parent);
+    void clearWidget(QTableWidget*);
 
     QString getActiveFile(){return activeFile;}
     void setActiveFile(QString);
