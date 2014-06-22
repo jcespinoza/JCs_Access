@@ -6,6 +6,7 @@
 #include <iostream>
 #include "fielddefinition.h"
 #include "tabledefinition.h"
+#include <list>
 
 
 using namespace std;
@@ -20,9 +21,12 @@ public:
     void readMasterBlock(string filename, MasterBlock&);
     void createNewFile(string filename, MasterBlock &master, int blockSize = 4096);
     void readTableList(string filename, MasterBlock&);
+    void readFieldList(string filename, MasterBlock&);
     void readDataBlock(string filename, MasterBlock& master, int blockID, char *dest);
     bool doesTableExist(string filename, string tableName, MasterBlock& master);
     void writeTableDefinition(string filename, MasterBlock& master, TableDefinition& table);
+    void writeFieldsDefinition(string filename, MasterBlock &, list<FieldDefinition>, TableDefinition &);
+    void updateCurrentTableBlock(string filename, MasterBlock&, TableDefinition&);
 
 private:
     MasterBlock master;

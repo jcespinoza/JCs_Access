@@ -35,7 +35,7 @@ QList<QString> QIntermediate::requestInfo(QString filename)
 {
     QList<QString> details;
     details.append(QString(masterBlock.getDataBaseName().c_str()));
-
+    engine.readTableList(filename.toStdString(), masterBlock);
     return details;
 }
 
@@ -53,6 +53,7 @@ void QIntermediate::resetHandlerState()
 
 void QIntermediate::changeTableName(QString tableName)
 {
+    qDebug() << "Sending string " << tableName;
     table.setName(tableName.toStdString());
 }
 
@@ -64,6 +65,7 @@ void QIntermediate::createDataBaseFile(QString filename, QString dbName)
 
 void QIntermediate::readDataBaseFile(QString filename)
 {
+    qDebug() << "Asking the Endgine to read the file";
     engine.readMasterBlock(filename.toStdString(), masterBlock);
 }
 
@@ -74,8 +76,17 @@ bool QIntermediate::tableExists(QString tableName)
 
 void QIntermediate::writeTableDefinition()
 {
-    qDebug() << "About to call the write() function";
     engine.writeTableDefinition(getActiveFile().toStdString(), masterBlock, table);
+}
+
+void QIntermediate::writeFieldDefinitions()
+{
+    engine.writeFieldsDefinition(getActiveFile().toStdString(),masterBlock, fieldsDef.toStdList(), table);
+}
+
+void QIntermediate::updateCurrentTableBlock()
+{
+    engine.updateCurrentTableBlock(getActiveFile().toStdString(), masterBlock, table);
 }
 
 QList<QString> QIntermediate::getFields(QWidget *parent)

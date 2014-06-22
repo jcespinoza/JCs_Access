@@ -17,6 +17,17 @@ TableDefinition::TableDefinition()
     indexBlockID = -1;
 }
 
+string TableDefinition::getName() const{
+    cout << "\nReturning " << name << " which should equal to " << tableName;
+    return name;
+}
+
+string TableDefinition::getTableName() const {
+    cout << "\nTAbleName: " << tableName;
+    cout << "\nREturn value: " << string(tableName);
+    return string(tableName);
+}
+
 void TableDefinition::setBlockID(int i )
 {
     blockID = i;
@@ -30,12 +41,13 @@ void TableDefinition::setTableID(int i)
 void TableDefinition::setName(string na)
 {
     name = na;
-    if(!na.empty())
+    if(!na.empty()){
         strncpy(tableName, na.c_str(),50);
-    else{
+    }else{
         string empty = "invalid";
         strncpy(tableName, empty.c_str(), 50);
     }
+    cout << "\nValue set: " << tableName;
 }
 
 void TableDefinition::incrementNDataRecords()
@@ -66,6 +78,11 @@ void TableDefinition::setIndexBlockID(int i)
 void TableDefinition::setActiveDataBlock(int i)
 {
     activeDataBlock = i;
+}
+
+void TableDefinition::setNFields(int i)
+{
+    nFields = i;
 }
 
 int TableDefinition::getSize()
@@ -106,7 +123,7 @@ void TableDefinition::toByteArray(char *dest, int buffSize)
 
 void TableDefinition::fromByteArray(char *source, int buffSize)
 {
-    if(buffSize < 4096)
+    if(buffSize < 74)
         return;
     memcpy(&nFields, source, 4);
     memcpy(&nDataRecords, &source[4], 4);
@@ -115,9 +132,10 @@ void TableDefinition::fromByteArray(char *source, int buffSize)
     memcpy(&firstDataBlock, &source[16], 4);
     memcpy(&activeDataBlock, &source[20], 4);
     char n[50];
-    cout << "Potential error about to happen here";
+    cout << "\nPotential error about to occur here";
     memcpy(n, &source[24], 50);
-    name = string(n);
+    string sname = string(n);
+    setName(sname);
 
     cout << "\nnFilds: "  << nFields;
     cout << "\nnDataRecords: "  << nDataRecords;
@@ -125,6 +143,6 @@ void TableDefinition::fromByteArray(char *source, int buffSize)
     cout << "\nindexBlockID: "  << indexBlockID;
     cout << "\nfirstDataBlock: "  << firstDataBlock;
     cout << "\nactiveDataBlock: "  << activeDataBlock;
-    cout << "\nname: "  << name;
+    cout << "\nname: "  << sname;
 
 }

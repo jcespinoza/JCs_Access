@@ -129,6 +129,7 @@ void MWindow::on_pbDiscardFieldDefinition_clicked()
     if(result == QMessageBox::No) return;
     showWelcomeScreen();
     handler.resetHandlerState();
+    ui->twFieldsDefinition->clearContents();
 }
 
 void MWindow::on_pbAcceptFieldDefinition_clicked()
@@ -150,12 +151,15 @@ void MWindow::on_pbAcceptFieldDefinition_clicked()
         return;
     }
     handler.changeTableName(tableName);
-    handler.writeTableDefinition();
-    //save the name into the tableDefinition variable for further storage
-    //write table definition in the current TableBlock and save to disk
+    if(handler.writeTableDefinition() == 0){
+        handler.writeFieldDefinitions();
+        handler.updateCurrentTableBlock();
+    }
     //write all definitions to a block and save to disk
 
     //increment the block count in the master properties
     //numberOfBlocks, numberOfTAbleBlocks and numberOffieldBlocks
     //reset the handler state so it doesnt store old information
+    handler.resetHandlerState();
+    ui->twFieldsDefinition->clearContents();
 }

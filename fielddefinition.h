@@ -2,6 +2,7 @@
 #define FIELDDEFINITION_H
 #include <string>
 #include <cstring>
+#include <iostream>
 using namespace std;
 
 class FieldDefinition
@@ -18,13 +19,17 @@ public:
     int getFieldType()const{return fieldType;}
     int getFieldSize()const{return fieldSize;}
     bool isKey(){return is_Key==1;}
-    string getFieldName()const{return fieldName;}
+    string getFieldName()const;
+    void toByteArray(char* dest, int buffSize);
+    void fromByteArray(char* source, int buffSize);
+    static int getSize();
 
 private:
     int fieldType;
     int is_Key;
     int fieldSize;
     string fieldName;
+    char name[50];
 };
 
 #endif // FIELDDEFINITION_H

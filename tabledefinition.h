@@ -11,13 +11,14 @@ public:
 
     int getBlockID()const{return blockID;}
     int getTableID()const{return tableID;}
-    string getName()const{return name;}
+    string getName()const;
     int getNDataRecords()const{return nDataRecords;}
+    int getNFields() const{return nFields;}
     int getFirstDataBlock()const{return firstDataBlock;}
     int getFirstFieldBlock()const{return firstFieldBlock;}
     int getIndexBlockID()const{return indexBlockID;}
     int getActiveDataBlock()const{return activeDataBlock;}
-    string getTableName() const { return string(tableName);}
+    string getTableName() const;
 
     void setBlockID(int);
     void setTableID(int);
@@ -28,7 +29,8 @@ public:
     void setFirstFieldBlock(int);
     void setIndexBlockID(int);
     void setActiveDataBlock(int);
-    int getSize();
+    void setNFields(int);
+    static int getSize();
 
     void toByteArray(char*dest, int buffSize);
     void fromByteArray(char* source, int buffSize);

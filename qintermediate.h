@@ -32,6 +32,8 @@ public:
     void readDataBaseFile(QString);
     bool tableExists(QString);
     void writeTableDefinition();
+    void writeFieldDefinitions();
+    void updateCurrentTableBlock();
 
 private:
     Controller engine;
