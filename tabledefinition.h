@@ -17,6 +17,7 @@ public:
     int getFirstFieldBlock()const{return firstFieldBlock;}
     int getIndexBlockID()const{return indexBlockID;}
     int getActiveDataBlock()const{return activeDataBlock;}
+    string getTableName() const { return string(tableName);}
 
     void setBlockID(int);
     void setTableID(int);
@@ -27,11 +28,16 @@ public:
     void setFirstFieldBlock(int);
     void setIndexBlockID(int);
     void setActiveDataBlock(int);
+    int getSize();
+
+    void toByteArray(char*dest, int buffSize);
+    void fromByteArray(char* source, int buffSize);
 
 private:
     int blockID;
     int tableID;
     string name;
+    char tableName[50];
     int nDataRecords;
     int nFields;
     int firstFieldBlock;

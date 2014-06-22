@@ -74,6 +74,7 @@ bool QIntermediate::tableExists(QString tableName)
 
 void QIntermediate::writeTableDefinition()
 {
+    qDebug() << "About to call the write() function";
     engine.writeTableDefinition(getActiveFile().toStdString(), masterBlock, table);
 }
 

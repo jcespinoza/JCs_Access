@@ -23,6 +23,7 @@ void MWindow::showWelcomeScreen()
 
 void MWindow::showStatistics()
 {
+    handler.readDataBaseFile(handler.getActiveFile());
     ui->stackedWidget->setCurrentWidget(ui->pgStatistics);
     ui->lbDataBaseName->setText(handler.getActiveDataBaseName());
     QList<QString> info = handler.requestInfo(handler.getActiveFile());
@@ -136,7 +137,7 @@ void MWindow::on_pbAcceptFieldDefinition_clicked()
     if(handler.getFieldDefinitions().count() < 1)
         result = QMessageBox::warning(this, "Tabla sin Campos", "Esta intentando guardar una tabla sin campos. Desea descartar los cambios?", QMessageBox::Yes,QMessageBox::No);
     if(result == QMessageBox::Yes){
-        on_pbDiscardFieldDefinition_clicked();
+        showStatistics();
         return;
     }
     if(result == QMessageBox::No) return;
