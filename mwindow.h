@@ -45,6 +45,10 @@ private slots:
 
     void on_pbAcceptFieldDefinition_clicked();
 
+    void on_pbAddRecords_clicked();
+
+    void on_pbCerrarDB_clicked();
+
 private:
     Ui::MWindow *ui;
     QIntermediate handler;

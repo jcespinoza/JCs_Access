@@ -35,6 +35,7 @@ public:
     void toByteArray(char*dest, int buffSize);
     void fromByteArray(char* source, int buffSize);
 
+
 private:
     int blockID;
     int tableID;

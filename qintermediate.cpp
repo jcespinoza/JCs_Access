@@ -49,6 +49,16 @@ void QIntermediate::addFieldDefinition(FieldDefinition &field)
     fieldsDef.append(field);
 }
 
+void QIntermediate::retrieveFieldDefinitionsFromDisk()
+{
+    fieldsDef = QList<FieldDefinition>::fromStdList(engine.readFieldList(getActiveFile().toStdString(), masterBlock, table));
+}
+
+int QIntermediate::retrieveTableFromDisk(QString tName)
+{
+    return engine.readTableDefinition(getActiveFile().toStdString(), masterBlock, table, tName.toStdString());
+}
+
 void QIntermediate::resetHandlerState()
 {
     allowKeyFields();

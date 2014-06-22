@@ -64,6 +64,12 @@ void FieldDefinition::fromByteArray(char *source, int buffSize)
     memcpy(&fieldSize, &source[4], 4);
     memcpy(&is_Key, &source[8], 4);
     memcpy(name, &source[12], 50);
+
+    cout << "\nF-Type: " << fieldType;
+    cout << "\nF-Size: " << fieldSize;
+    cout << "\nF-Key: " << is_Key;
+    cout << "\nF-name: " << getFieldName();
+
 }
 
 int FieldDefinition::getSize()

@@ -21,7 +21,8 @@ public:
     void readMasterBlock(string filename, MasterBlock&);
     void createNewFile(string filename, MasterBlock &master, int blockSize = 4096);
     list<TableDefinition> readTableList(string filename, MasterBlock&);
-    void readFieldList(string filename, MasterBlock&, TableDefinition &);
+    list<FieldDefinition> readFieldList(string filename, MasterBlock&, TableDefinition &);
+    int readTableDefinition(string filename, MasterBlock&, TableDefinition&table, string tName);
     void readDataBlock(string filename, MasterBlock& master, int blockID, char *dest);
     bool doesTableExist(string filename, string tableName, MasterBlock& master);
     int writeTableDefinition(string filename, MasterBlock& master, TableDefinition& table);

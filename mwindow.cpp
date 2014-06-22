@@ -55,6 +55,7 @@ void MWindow::on_pbNewDataBase_clicked()
 
 void MWindow::on_pbOpenDataBase_clicked()
 {
+    handler.resetHandlerState();
     bool ok = true;
     QString filename = handler.getAFilename(this, "Elija el archivo de la base de datos", 0, ok);
     if(!ok || filename.isEmpty())
@@ -66,7 +67,7 @@ void MWindow::on_pbOpenDataBase_clicked()
 
 void MWindow::on_lwTablesList_itemDoubleClicked(QListWidgetItem *)
 {
-    //Code to open that table on another panel
+    on_pbAddRecords_clicked();
 }
 
 void MWindow::on_action_Nuevo_triggered()
@@ -81,23 +82,30 @@ void MWindow::on_action_Abrir_triggered()
         int res = QMessageBox::warning(this, "Precaucion", "Hay una base de datos abierta, desea cerrarla primero?", QMessageBox::Yes, QMessageBox::No);
         if(res == QMessageBox::Yes)
             on_pbOpenDataBase_clicked();
+    }else{
+        on_pbOpenDataBase_clicked();
     }
 }
 
 void MWindow::on_actionCerrar_Bade_de_Datos_triggered()
 {
-    //code
+    handler.resetHandlerState();
     showWelcomeScreen();
 }
 
 void MWindow::on_action_Salir_triggered()
 {
-    //code to save changes first then close
+    QApplication::exit();
 }
 
 void MWindow::on_actionNueva_Tabla_triggered()
 {
-    //Code to add a table to the current database
+    if(handler.getActiveDataBaseName() == "invalid"
+            || handler.getActiveFile().isEmpty()){
+        QMessageBox::information(this, "Accion Invalida", "Debe abrir una base de datos antes de poder agregar un tabla");
+        return;
+    }
+    on_pbAddTable_clicked();
 }
 
 void MWindow::on_actionAcerca_de_JC_s_Access_triggered()
@@ -136,9 +144,7 @@ void MWindow::on_pbDiscardFieldDefinition_clicked()
     if(handler.getFieldDefinitions().count() > 0)
         result = QMessageBox::question(this, "Descartar Cambios?", "Seguro que desea descartar la definicion de la tabla?");
     if(result == QMessageBox::No) return;
-    showWelcomeScreen();
-    handler.resetHandlerState();
-    ui->twFieldsDefinition->clearContents();
+    showStatistics();
 }
 
 void MWindow::on_pbAcceptFieldDefinition_clicked()
@@ -168,6 +174,24 @@ void MWindow::on_pbAcceptFieldDefinition_clicked()
 
     //increment the block count in the master properties
     //numberOfBlocks, numberOfTAbleBlocks and numberOffieldBlocks
-    //reset the handler state so it doesnt store old information
+    handler.resetHandlerState();
     showStatistics();
+}
+
+void MWindow::on_pbAddRecords_clicked()
+{
+    //code to get the selected index from the list of tables
+    int selected = ui->lwTablesList->currentRow();
+    qDebug() << "Selcted " << selected;
+    if(selected == -1){
+        QMessageBox::information(this, "Sin Selection", "Por favor seleccione una tabla de la lista");
+        return;
+    }
+    handler.retrieveTableFromDisk(ui->lwTablesList->currentItem()->text());
+    handler.printTable();
+}
+
+void MWindow::on_pbCerrarDB_clicked()
+{
+    on_actionCerrar_Bade_de_Datos_triggered();
 }

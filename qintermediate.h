@@ -22,6 +22,8 @@ public:
     bool isWorking(){return !activeFile.isEmpty();}
     void addFieldDefinition(FieldDefinition&);
     QList<FieldDefinition> getFieldDefinitions(){return fieldsDef;}
+    void retrieveFieldDefinitionsFromDisk();
+    int retrieveTableFromDisk(QString tName);
     void dontAllowMoreKeyFields(){keyWasSelected = true;}
     void allowKeyFields(){keyWasSelected = false;}
     bool canAcceptKeyFields()const{return !keyWasSelected;}

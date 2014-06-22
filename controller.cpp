@@ -63,12 +63,71 @@ list<TableDefinition> Controller::readTableList(string filename, MasterBlock &ma
             tables.push_back(newOne);
         }
     }
+    delete[] block;
+    fclose(dbFile);
     return tables;
 }
 
-void Controller::readFieldList(string filename, MasterBlock &, TableDefinition&)
+list<FieldDefinition> Controller::readFieldList(string filename, MasterBlock &master, TableDefinition& table)
 {
+    list<FieldDefinition> fields;
+    //assuming masterblock and table have both accurate data
+    FILE* dbFile = fopen(filename.c_str(), "rb");
+    fseek(dbFile, table.getFirstFieldBlock()*master.getBlockSize(), SEEK_SET);
+    qDebug() << "Does position look good? " << ftell(dbFile);
+    char* block = new char[master.getBlockSize()];
+    int nFields;
+    int next;
+    int fsize;
+    fread(block, 1, master.getBlockSize(), dbFile);
+    memcpy(&nFields, block, 4);
+    memcpy(&next, &block[4], 4); //will probably be always -1
+    memcpy(&fsize, &block[8], 4);
+    char* fblock = new char[fsize];
+    for(int i = 0; i < nFields; i++){
+        memcpy(fblock, &block[12+i*fsize], fsize);
+        FieldDefinition f;
+        f.fromByteArray(fblock, fsize);
+        cout << "\nFieldName: " << f.getFieldName();
+    }
+    delete[] fblock;
+    //seek the file to the block indicated by table
+    //load the block to memory
+    //skip first 12 bytes
+    //prepare a list for further return to the caller
+    delete[] block;
+    fclose(dbFile);
+    return fields;
+}
 
+int Controller::readTableDefinition(string filename, MasterBlock &master, TableDefinition &table, string tName)
+{
+    int r = -1;
+    int currentIndex = master.getFirstDefTableBlock();
+
+    FILE* dbFile = fopen(filename.c_str(), "rb");
+    char* block = new char[master.getBlockSize()];
+    TableDefinition tempT;
+    while(currentIndex != -1){
+        fseek(dbFile, currentIndex*master.getBlockSize(), SEEK_SET);
+        fread(block, 1, master.getBlockSize(), dbFile);
+        int ntablas = 0;
+        memcpy(&ntablas, block, 4);
+        memcpy(&currentIndex, &block[4], 4);
+        for(int i = 0; i < ntablas; i++){
+            tempT.fromByteArray(&block[12+i*tempT.getSize()], tempT.getSize());
+            cout << "\nComparison: " << tName << " | " << tempT.getName();
+            if(strcmp(tName.c_str(),tempT.getName().c_str())){
+                table.fromByteArray(&block[12+i*tempT.getSize()], tempT.getSize());
+                r = 0;
+                break;
+            }
+        }
+        if(r == 0) break;
+    }
+    delete[] block;
+    fclose(dbFile);
+    return r;
 }
 
 void Controller::readDataBlock(string filename, MasterBlock &master, int blockID, char* dest)
@@ -227,9 +286,11 @@ void Controller::writeFieldsDefinition(string filename, MasterBlock &master, lis
         char *temp = new char[fSize];
         (*it).toByteArray(temp, fSize);
         memcpy(&block[12+i*fSize], temp, fSize);
+        /*
         for(int i = 0; i < fSize; i++){
             qDebug() << temp[i];
         }
+        */
     }
 
     FILE* dbFile = fopen(filename.c_str(), "r+b");
