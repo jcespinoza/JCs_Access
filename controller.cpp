@@ -42,8 +42,9 @@ void Controller::createNewFile(string filename, MasterBlock& master, int blockSi
     delete[] block;
 }
 
-void Controller::readTableList(string filename, MasterBlock &master)
+list<TableDefinition> Controller::readTableList(string filename, MasterBlock &master)
 {
+    list<TableDefinition> tables;
     int currentIndex = master.getFirstDefTableBlock();
 
     FILE* dbFile = fopen(filename.c_str(), "rb");
@@ -59,9 +60,11 @@ void Controller::readTableList(string filename, MasterBlock &master)
         for(int i = 0; i < ntablas; i++){
             tempT.fromByteArray(&block[12+i*tempT.getSize()], tempT.getSize());
             qDebug() << "TAble Name: " << QString::fromStdString(tempT.getName());
+            TableDefinition newOne = tempT;
+            tables.push_back(newOne);
         }
     }
-
+    return tables;
 }
 
 void Controller::readFieldList(string filename, MasterBlock &, TableDefinition&)

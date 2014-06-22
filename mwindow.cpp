@@ -27,6 +27,14 @@ void MWindow::showStatistics()
     ui->stackedWidget->setCurrentWidget(ui->pgStatistics);
     ui->lbDataBaseName->setText(handler.getActiveDataBaseName());
     QList<QString> info = handler.requestInfo(handler.getActiveFile());
+    ui->lbDataBaseName->setText(info.at(0));
+    ui->lbNumberOfTables->setText(info.at(1));
+    qDebug() << "info count" << info.count();
+    for(int i = 2; i < info.count(); i++){
+        ui->lwTablesList->addItem(info.at(i));
+        ui->lwTables->addItem(info.at(i));
+        qDebug()<< "TABLE i: " << info.at(i);
+    }
 }
 
 void MWindow::on_pbNewDataBase_clicked()

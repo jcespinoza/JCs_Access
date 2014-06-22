@@ -108,7 +108,7 @@ int MasterBlock::fromByteArray(char *source, int buffSize)
     memcpy(&numberOfDataBlocks, &source[24], 4);
     memcpy(&numberOfIndexBlocks, &source[28], 4);
     memcpy(databaseName, &source[32], 50);
-    /*
+
     cout << "\nREAD DATA:";
     cout << "\nNBlocks: " << numberOfBlocks;
     cout << "\nblockSize: " << blockSize;
@@ -119,6 +119,6 @@ int MasterBlock::fromByteArray(char *source, int buffSize)
     cout << "\nnumberOfDataBlocks: " << numberOfDataBlocks;
     cout << "\nnumberOfIndexBlocks: " << numberOfIndexBlocks;
     cout << "\ndatabaseName: " << databaseName;
-    */
+
     return 0;
 }

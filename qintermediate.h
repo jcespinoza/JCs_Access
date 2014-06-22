@@ -31,7 +31,7 @@ public:
     void createDataBaseFile(QString, QString);
     void readDataBaseFile(QString);
     bool tableExists(QString);
-    void writeTableDefinition();
+    int writeTableDefinition();
     void writeFieldDefinitions();
     void updateCurrentTableBlock();
 
@@ -39,6 +39,7 @@ private:
     Controller engine;
     QString activeFile;
     MasterBlock masterBlock;
+    QList<TableDefinition> tables;
     TableDefinition table;
     QList<FieldDefinition> fieldsDef;
     bool keyWasSelected;

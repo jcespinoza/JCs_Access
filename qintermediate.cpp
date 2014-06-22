@@ -35,7 +35,12 @@ QList<QString> QIntermediate::requestInfo(QString filename)
 {
     QList<QString> details;
     details.append(QString(masterBlock.getDataBaseName().c_str()));
-    engine.readTableList(filename.toStdString(), masterBlock);
+    tables = QList<TableDefinition>::fromStdList(engine.readTableList(filename.toStdString(), masterBlock));
+    details.append(QString::number(tables.count()));
+    qDebug() << "Tables from FILe: " << tables.count();
+    for(int i = 0; i < tables.count(); i++){
+        details.append(QString::fromStdString(tables.at(i).getName()));
+    }
     return details;
 }
 
@@ -48,7 +53,8 @@ void QIntermediate::resetHandlerState()
 {
     allowKeyFields();
     fieldsDef.clear();
-    //reset table definition variables
+    table = TableDefinition();
+    tables.clear();
 }
 
 void QIntermediate::changeTableName(QString tableName)
@@ -74,9 +80,9 @@ bool QIntermediate::tableExists(QString tableName)
     return engine.doesTableExist(getActiveFile().toStdString(), tableName.toStdString(), masterBlock);
 }
 
-void QIntermediate::writeTableDefinition()
+int QIntermediate::writeTableDefinition()
 {
-    engine.writeTableDefinition(getActiveFile().toStdString(), masterBlock, table);
+    return engine.writeTableDefinition(getActiveFile().toStdString(), masterBlock, table);
 }
 
 void QIntermediate::writeFieldDefinitions()
