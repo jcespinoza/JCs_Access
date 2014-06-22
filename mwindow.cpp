@@ -55,7 +55,7 @@ void MWindow::on_pbOpenDataBase_clicked()
     showStatistics();
 }
 
-void MWindow::on_lwTablesList_itemDoubleClicked(QListWidgetItem *item)
+void MWindow::on_lwTablesList_itemDoubleClicked(QListWidgetItem *)
 {
     //Code to open that table on another panel
 }
@@ -94,4 +94,67 @@ void MWindow::on_actionNueva_Tabla_triggered()
 void MWindow::on_actionAcerca_de_JC_s_Access_triggered()
 {
     //code to show the developers info
+}
+
+void MWindow::on_pbAddTable_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->pgNewTable);
+}
+
+void MWindow::on_pbAddField_clicked()
+{
+    QList<QString> fields = handler.getFields(this);
+    if(fields.isEmpty()) return;
+    FieldDefinition def( fields[0].toInt(), fields[1].toInt(), fields[2].toInt(), fields[3].toStdString());
+    fields[2] = (def.isKey())?"Si":"No";
+    if(def.isKey() && !handler.canAcceptKeyFields()){
+        QMessageBox::warning(this,"Multiple Llave no soportado", "Usted ya selecciono un campo llave",QMessageBox::Ok);
+        return;
+    }
+    int row = ui->twFieldsDefinition->rowCount();
+    ui->twFieldsDefinition->insertRow(row);
+    for(int i = 0; i < fields.count(); i++){
+        ui->twFieldsDefinition->setItem(row, i, new QTableWidgetItem(fields.at(i)));
+    }
+    handler.addFieldDefinition(def);
+    if(def.isKey()) handler.dontAllowMoreKeyFields();
+}
+
+void MWindow::on_pbDiscardFieldDefinition_clicked()
+{
+    int result = QMessageBox::Yes;
+    if(handler.getFieldDefinitions().count() > 0)
+        result = QMessageBox::question(this, "Descartar Cambios?", "Seguro que desea descartar la definicion de la tabla?");
+    if(result == QMessageBox::No) return;
+    showWelcomeScreen();
+    handler.resetHandlerState();
+}
+
+void MWindow::on_pbAcceptFieldDefinition_clicked()
+{
+    int result = 0;
+    if(handler.getFieldDefinitions().count() < 1)
+        result = QMessageBox::warning(this, "Tabla sin Campos", "Esta intentando guardar una tabla sin campos. Desea descartar los cambios?", QMessageBox::Yes,QMessageBox::No);
+    if(result == QMessageBox::Yes){
+        on_pbDiscardFieldDefinition_clicked();
+        return;
+    }
+    if(result == QMessageBox::No) return;
+
+    QString tableName = handler.getAName(this, "Ingrese un nombre para esta tabla", "Nombre de Tabla");
+    if(tableName.isEmpty()) return;
+    //check if the table exists
+    if(handler.tableExists(tableName)){
+        QMessageBox::warning(this, "Nombre en Conflicto", "Ya existe una tabla con ese nombre");
+        return;
+    }
+    handler.changeTableName(tableName);
+    handler.writeTableDefinition();
+    //save the name into the tableDefinition variable for further storage
+    //write table definition in the current TableBlock and save to disk
+    //write all definitions to a block and save to disk
+
+    //increment the block count in the master properties
+    //numberOfBlocks, numberOfTAbleBlocks and numberOffieldBlocks
+    //reset the handler state so it doesnt store old information
 }

@@ -4,6 +4,9 @@
 #include <cstdio>
 #include "masterblock.h"
 #include <iostream>
+#include "fielddefinition.h"
+#include "tabledefinition.h"
+
 
 using namespace std;
 
@@ -15,9 +18,11 @@ public:
     void wholeFileToDisk(string filename, int position, MasterBlock&);
     void updateMasterBlock(string filename, MasterBlock&);
     void readMasterBlock(string filename, MasterBlock&);
-    void createNewFile(string filename, string name, int blockSize = 4096);
+    void createNewFile(string filename, MasterBlock &master, int blockSize = 4096);
     void readTableList(string filename, MasterBlock&);
-    void read
+    void readDataBlock(string filename, MasterBlock& master, int blockID, char *dest);
+    bool doesTableExist(string filename, string tableName, MasterBlock& master);
+    void writeTableDefinition(string filename, MasterBlock& master, TableDefinition& table);
 
 private:
     MasterBlock master;

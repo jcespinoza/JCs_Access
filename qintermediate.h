@@ -12,20 +12,34 @@ public:
     explicit QIntermediate(QWidget *parent = 0);
 
     QString getAFilename(QWidget*parent, QString message, int type, bool &ok);
-    QString getActiveFile(){return activeFile;}
     QString getAName(QWidget *parent,QString message, QString title);
-    QList<QString> requestInfo(QString);
-    void createDataBaseFile(QString, QString);
-    void readDataBaseFile(QString);
     QList<QString> getFields(QWidget *parent);
+
+    QString getActiveFile(){return activeFile;}
     void setActiveFile(QString);
     QString getActiveDataBaseName();
     bool isWorking(){return !activeFile.isEmpty();}
+    void addFieldDefinition(FieldDefinition&);
+    QList<FieldDefinition> getFieldDefinitions(){return fieldsDef;}
+    void dontAllowMoreKeyFields(){keyWasSelected = true;}
+    void allowKeyFields(){keyWasSelected = false;}
+    bool canAcceptKeyFields()const{return !keyWasSelected;}
+    void resetHandlerState();
+    void changeTableName(QString);
+
+    QList<QString> requestInfo(QString);
+    void createDataBaseFile(QString, QString);
+    void readDataBaseFile(QString);
+    bool tableExists(QString);
+    void writeTableDefinition();
 
 private:
     Controller engine;
     QString activeFile;
     MasterBlock masterBlock;
+    TableDefinition table;
+    QList<FieldDefinition> fieldsDef;
+    bool keyWasSelected;
 
 signals:
 

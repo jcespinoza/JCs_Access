@@ -37,6 +37,14 @@ private slots:
 
     void on_actionAcerca_de_JC_s_Access_triggered();
 
+    void on_pbAddTable_clicked();
+
+    void on_pbAddField_clicked();
+
+    void on_pbDiscardFieldDefinition_clicked();
+
+    void on_pbAcceptFieldDefinition_clicked();
+
 private:
     Ui::MWindow *ui;
     QIntermediate handler;

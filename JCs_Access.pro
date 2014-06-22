@@ -18,14 +18,18 @@ SOURCES += main.cpp\
     qintermediate.cpp \
     addfieldsdialog.cpp \
     GeneralHashFunctions.cpp \
-    masterblock.cpp
+    masterblock.cpp \
+    tabledefinition.cpp \
+    fielddefinition.cpp
 
 HEADERS  += mwindow.h \
     controller.h \
     qintermediate.h \
     addfieldsdialog.h \
     GeneralHashFunctions.h \
-    masterblock.h
+    masterblock.h \
+    tabledefinition.h \
+    fielddefinition.h
 
 FORMS    += mwindow.ui \
     addfieldsdialog.ui

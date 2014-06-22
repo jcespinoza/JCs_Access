@@ -16,6 +16,7 @@ public:
     ~AddFieldsDialog();
     int getType(){return type;}
     int getSize(){return size;}
+    int getKey(){return key;}
     QString getName(){return name;}
 
 private slots:
@@ -24,10 +25,13 @@ private slots:
     void on_leFieldSize_editingFinished();
     void on_leFieldName_editingFinished();
 
+    void on_rbKeyYes_toggled(bool checked);
+
 private:
     Ui::AddFieldsDialog *ui;
     int type;
     int size;
+    int key;
     QString name;
 };
 
