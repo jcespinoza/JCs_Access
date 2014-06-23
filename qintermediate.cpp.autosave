@@ -144,7 +144,7 @@ void QIntermediate::saveRecords(QTableWidget *tw)
 
 void QIntermediate::loadRecords(QTableWidget *)
 {
-
+    list<list<string> > records;
 }
 
 QList<QString> QIntermediate::getFields(QWidget *parent)

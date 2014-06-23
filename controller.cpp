@@ -305,6 +305,7 @@ void Controller::writeRecords(string filename, MasterBlock &master, TableDefinit
     if(indexData == -1){//it's the first one
         char* block = new char[master.getBlockSize()];
         //table.setActiveDataBlock(nBlocks);
+
         memcpy(block, &nRecords, 4);
         memcpy(&block[4], &indexData, 4);
         memcpy(&block[8], &sizeOfRecords, 4);
@@ -317,8 +318,8 @@ void Controller::writeRecords(string filename, MasterBlock &master, TableDefinit
             list<FieldDefinition>::iterator ft;
             for(ut = (*it).begin(), ft = fDef.begin(); ut != (*it).end() && ft != fDef.end(); ++ut, ++ft){
                 qDebug() << "field " << QString::fromStdString((*ft).getFieldName());
-                int fsize = (*ft).getFieldSize();
-                int ftype = (*ft).getFieldType();
+                fsize = (*ft).getFieldSize();
+                ftype = (*ft).getFieldType();
                 qDebug() << "column " << QString::fromStdString((*ut));
                 if(ftype == 0){
                     int value = atoi((*ut).c_str());
@@ -340,8 +341,8 @@ void Controller::writeRecords(string filename, MasterBlock &master, TableDefinit
             memcpy(rBlock, &block[12+i*sizeOfRecords],sizeOfRecords);
             list<FieldDefinition>::iterator ft;
             for(ft = fDef.begin(); ft != fDef.end(); ++ft){
-                int fsize = (*ft).getFieldSize();
-                int ftype = (*ft).getFieldType();
+                fsize = (*ft).getFieldSize();
+                ftype = (*ft).getFieldType();
                 if(ftype == 0){
                     int value(0);
                     memcpy(&value, &rBlock[wIndex],4);
@@ -357,24 +358,87 @@ void Controller::writeRecords(string filename, MasterBlock &master, TableDefinit
             delete[] rBlock;
         }
         */
-        fseek(dbFile,nBlocks*master.getBlockSize()+sizeOfRecords*oRecords, SEEK_SET );
+        fseek(dbFile,nBlocks*master.getBlockSize(), SEEK_SET );
         qDebug()<< "Writting on position: " <<ftell(dbFile);
         fwrite(block, 1, master.getBlockSize(), dbFile);
-        /master.incrementBlockCount();
-        //table incrementRecordsCount();
-        //master.setNumberOfDataBlocks(master.getNumberOfDataBlocks()+1);
+        master.incrementBlockCount();
+
+        table.setActiveDataBlock(nBlocks);
+        table.setNDataRecords(oRecords + nRecords);
+        master.setNumberOfDataBlocks(master.getNumberOfDataBlocks()+1);
+        updateNeeded = true;
         delete[] block;
     }else{
+        char* header = new char[12];
+        fseek(dbFile, nBlocks*master.getBlockSize(), SEEK_SET);
+        fread(header, 1, 12, dbFile);
+        memcpy(header, &nRecords, 4);
+        memcpy(&header[4], &indexData, 4);
+        memcpy(&header[8], &sizeOfRecords, 4);
+        char* block = new char[sizeOfRecords*nRecords];
+        int i = oRecords;
+        for(list<list<string> >::iterator it = records.begin(); it != records.end(); ++it){
+            char* rowBlock = new char[sizeOfRecords];
+            int wIndex = 0;
+            list<string>::iterator ut;
+            list<FieldDefinition>::iterator ft;
+            for(ut = (*it).begin(), ft = fDef.begin(); ut != (*it).end() && ft != fDef.end(); ++ut, ++ft){
+                qDebug() << "field " << QString::fromStdString((*ft).getFieldName());
+                fsize = (*ft).getFieldSize();
+                ftype = (*ft).getFieldType();
+                qDebug() << "column " << QString::fromStdString((*ut));
+                if(ftype == 0){
+                    int value = atoi((*ut).c_str());
+                    memcpy(&rowBlock[wIndex], &value,4);
+                }else{
+                    memcpy(&rowBlock[wIndex], (*ut).c_str(), fsize);
+                }
+                wIndex += fsize;
+            }
+            memcpy(&block[i*sizeOfRecords], rowBlock, sizeOfRecords);
+            i++;
+            delete[] rowBlock;
+        }
+        delete[] block;
+        fseek(dbFile, master.getBlockSize()*indexData+12,SEEK_SET);
+        fwrite(block, 1, sizeOfRecords*nRecords, dbFile);
         while(indexData != 1){
 
         }
     }
     fclose(dbFile);
-    /*
+
     if(table.getFirstDataBlock() == -1)
         table.setFirstDataBlock(nBlocks);
     if(updateNeeded)
         updateMasterBlock(filename, master);
+}
+
+void Controller::loadRecords(string filename, MasterBlock &, TableDefinition &, list<FieldDefinition>, list<list<string> > &, int)
+{
+    /*
+    for(int i = oRecords; i < records.size(); i++){
+        char* rBlock =new char[sizeOfRecords];
+        int wIndex = 0;
+        memcpy(rBlock, &block[12+i*sizeOfRecords],sizeOfRecords);
+        list<FieldDefinition>::iterator ft;
+        for(ft = fDef.begin(); ft != fDef.end(); ++ft){
+            fsize = (*ft).getFieldSize();
+            ftype = (*ft).getFieldType();
+            if(ftype == 0){
+                int value(0);
+                memcpy(&value, &rBlock[wIndex],4);
+                qDebug() << "Val: " << value;
+            }else{
+                char*str = new char[fsize];
+                memcpy(str, &rBlock[wIndex],fsize);
+                qDebug() << "Str: " << str;
+                delete[] str;
+            }
+            wIndex += fsize;
+        }
+        delete[] rBlock;
+    }
     */
 }
 
