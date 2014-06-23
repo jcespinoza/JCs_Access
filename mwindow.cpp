@@ -28,6 +28,7 @@ void MWindow::showStatistics()
     handler.readDataBaseFile(handler.getActiveFile());
     ui->stackedWidget->setCurrentWidget(ui->pgStatistics);
     ui->lbDataBaseName->setText(handler.getActiveDataBaseName());
+    ui->lbDataBaseName_DataPage->setText(handler.getActiveDataBaseName());
     QList<QString> info = handler.requestInfo(handler.getActiveFile());
     ui->lbDataBaseName->setText(info.at(0));
     ui->lbNumberOfTables->setText(info.at(1));
@@ -35,6 +36,14 @@ void MWindow::showStatistics()
     for(int i = 2; i < info.count(); i++){
         ui->lwTablesList->addItem(info.at(i));
     }
+}
+
+void MWindow::showDataPanel()
+{
+    handler.retrieveFieldDefinitionsFromDisk();
+    handler.loadFieldDefinitionsIntoHeader(ui->twData);
+    ui->lbTableName->setText(handler.getActiveTableName());
+    ui->stackedWidget->setCurrentWidget(ui->pgData);
 }
 
 void MWindow::on_pbNewDataBase_clicked()
@@ -188,10 +197,26 @@ void MWindow::on_pbAddRecords_clicked()
         return;
     }
     handler.retrieveTableFromDisk(ui->lwTablesList->currentItem()->text());
-    handler.printTable();
+    showDataPanel();
 }
 
 void MWindow::on_pbCerrarDB_clicked()
 {
     on_actionCerrar_Bade_de_Datos_triggered();
+}
+
+void MWindow::on_actionHacer_Consultar_triggered()
+{
+    //Code to look by key here
+}
+
+void MWindow::on_pbQuery_clicked()
+{
+    on_actionHacer_Consultar_triggered();
+}
+
+void MWindow::on_actionCerrar_Tabla_triggered()
+{
+    //Ask to save changes
+    showStatistics();
 }

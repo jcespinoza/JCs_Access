@@ -3,6 +3,7 @@
 #include <QInputDialog>
 #include <QDebug>
 #include "addfieldsdialog.h"
+#include <QHeaderView>
 
 QIntermediate::QIntermediate(QWidget *parent) :
     QWidget(parent)
@@ -81,7 +82,6 @@ void QIntermediate::createDataBaseFile(QString filename, QString dbName)
 
 void QIntermediate::readDataBaseFile(QString filename)
 {
-    qDebug() << "Asking the Endgine to read the file";
     engine.readMasterBlock(filename.toStdString(), masterBlock);
 }
 
@@ -126,6 +126,22 @@ void QIntermediate::clearWidget(QTableWidget *tw)
     }
 }
 
+void QIntermediate::loadFieldDefinitionsIntoHeader(QTableWidget *tw)
+{
+    while(tw->rowCount() > 0)
+        tw->removeRow(tw->rowCount()-1);
+    tw->setRowCount(0);
+    tw->setColumnCount(0);
+    QStringList headerLabels;
+    for(int i = 0; i < fieldsDef.count(); i++){
+        QString h = QString::fromStdString(fieldsDef.at(i).getFieldName());
+        headerLabels.append(h);
+        tw->insertColumn(i);
+    }
+    tw->setHorizontalHeaderLabels(headerLabels);
+    tw->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+}
+
 void QIntermediate::setActiveFile(QString filename)
 {
     this->activeFile = filename;
@@ -134,4 +150,9 @@ void QIntermediate::setActiveFile(QString filename)
 QString QIntermediate::getActiveDataBaseName()
 {
     return QString::fromStdString(masterBlock.getDataBaseName());
+}
+
+QString QIntermediate::getActiveTableName()
+{
+    return QString::fromStdString(table.getName());
 }

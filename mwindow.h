@@ -20,34 +20,27 @@ public:
 private slots:
     void showWelcomeScreen();
     void showStatistics();
+    void showDataPanel();
     void on_pbNewDataBase_clicked();
     void on_pbOpenDataBase_clicked();
-
     void on_lwTablesList_itemDoubleClicked(QListWidgetItem *item);
-
     void on_action_Nuevo_triggered();
-
     void on_action_Abrir_triggered();
-
     void on_actionCerrar_Bade_de_Datos_triggered();
-
     void on_action_Salir_triggered();
-
     void on_actionNueva_Tabla_triggered();
-
     void on_actionAcerca_de_JC_s_Access_triggered();
-
     void on_pbAddTable_clicked();
-
     void on_pbAddField_clicked();
-
     void on_pbDiscardFieldDefinition_clicked();
-
     void on_pbAcceptFieldDefinition_clicked();
-
     void on_pbAddRecords_clicked();
-
     void on_pbCerrarDB_clicked();
+    void on_actionHacer_Consultar_triggered();
+
+    void on_pbQuery_clicked();
+
+    void on_actionCerrar_Tabla_triggered();
 
 private:
     Ui::MWindow *ui;

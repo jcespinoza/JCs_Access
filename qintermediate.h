@@ -15,10 +15,12 @@ public:
     QString getAName(QWidget *parent,QString message, QString title);
     QList<QString> getFields(QWidget *parent);
     void clearWidget(QTableWidget*);
+    void loadFieldDefinitionsIntoHeader(QTableWidget*);
 
     QString getActiveFile(){return activeFile;}
     void setActiveFile(QString);
     QString getActiveDataBaseName();
+    QString getActiveTableName();
     bool isWorking(){return !activeFile.isEmpty();}
     void addFieldDefinition(FieldDefinition&);
     QList<FieldDefinition> getFieldDefinitions(){return fieldsDef;}

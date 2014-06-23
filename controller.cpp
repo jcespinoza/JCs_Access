@@ -88,7 +88,7 @@ list<FieldDefinition> Controller::readFieldList(string filename, MasterBlock &ma
         memcpy(fblock, &block[12+i*fsize], fsize);
         FieldDefinition f;
         f.fromByteArray(fblock, fsize);
-        cout << "\nFieldName: " << f.getFieldName();
+        fields.push_back(f);
     }
     delete[] fblock;
     //seek the file to the block indicated by table

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="pgWelcome">
      <widget class="QLabel" name="label_4">
@@ -183,7 +183,7 @@
         <x>490</x>
         <y>170</y>
         <width>201</width>
-        <height>201</height>
+        <height>231</height>
        </rect>
       </property>
       <property name="alternatingRowColors">
@@ -236,13 +236,26 @@
       <property name="geometry">
        <rect>
         <x>150</x>
-        <y>340</y>
+        <y>380</y>
         <width>141</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
        <string>Cerrar Base de Datos</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbQuery">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>340</y>
+        <width>141</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Consultar Tabla</string>
       </property>
      </widget>
     </widget>
@@ -353,7 +366,78 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="pgData"/>
+    <widget class="QWidget" name="pgData">
+     <widget class="QTableWidget" name="twData">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>711</width>
+        <height>291</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>TEst</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QLabel" name="lbDataBaseName_DataPage">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>0</y>
+        <width>421</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbTableName">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>20</y>
+        <width>421</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>360</y>
+        <width>141</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Agregar Registro</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -380,6 +464,9 @@
      <string>&amp;Opciones de Base de Datos</string>
     </property>
     <addaction name="actionNueva_Tabla"/>
+    <addaction name="actionConsultar_Tabla"/>
+    <addaction name="actionHacer_Consultar"/>
+    <addaction name="actionCerrar_Tabla"/>
    </widget>
    <widget class="QMenu" name="menuA_yuda">
     <property name="title">
@@ -432,6 +519,27 @@
   <action name="actionAcerca_de_JC_s_Access">
    <property name="text">
     <string>Acerca de JC's Access</string>
+   </property>
+  </action>
+  <action name="actionConsultar_Tabla">
+   <property name="text">
+    <string>Agregar Registros</string>
+   </property>
+  </action>
+  <action name="actionHacer_Consultar">
+   <property name="text">
+    <string>Hacer Consulta</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionCerrar_Tabla">
+   <property name="text">
+    <string>Cerrar Tabla</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
    </property>
   </action>
  </widget>
