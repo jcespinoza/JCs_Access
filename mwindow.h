@@ -37,14 +37,11 @@ private slots:
     void on_pbAddRecords_clicked();
     void on_pbCerrarDB_clicked();
     void on_actionHacer_Consultar_triggered();
-
     void on_pbQuery_clicked();
-
     void on_actionCerrar_Tabla_triggered();
-
     void on_pbAddRow_clicked();
-
     void on_pbSaveRecords_clicked();
+    void on_pbDiscardRecords_clicked();
 
 private:
     Ui::MWindow *ui;

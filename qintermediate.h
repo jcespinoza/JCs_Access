@@ -35,6 +35,7 @@ public:
     void setValidatorMaxLenght(int max);
     void resetHandlerState();
     void changeTableName(QString);
+    int computeRecordSize();
 
     QList<QString> requestInfo(QString);
     void createDataBaseFile(QString, QString);

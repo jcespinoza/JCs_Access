@@ -16,7 +16,6 @@ class Controller
 public:
     Controller();
 
-    void wholeFileToDisk(string filename, int position, MasterBlock&);
     void updateMasterBlock(string filename, MasterBlock&);
     void readMasterBlock(string filename, MasterBlock&);
     void createNewFile(string filename, MasterBlock &master, int blockSize = 4096);
@@ -27,6 +26,7 @@ public:
     bool doesTableExist(string filename, string tableName, MasterBlock& master);
     int writeTableDefinition(string filename, MasterBlock& master, TableDefinition& table);
     void writeFieldsDefinition(string filename, MasterBlock &, list<FieldDefinition>, TableDefinition &);
+    void writeRecords(string filename, MasterBlock&, TableDefinition&, list<FieldDefinition>, list<list<string> >&, int);
     void updateCurrentTableBlock(string filename, MasterBlock&, TableDefinition&);
 
 private:

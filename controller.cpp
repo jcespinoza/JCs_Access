@@ -7,11 +7,6 @@ Controller::Controller()
 {
 }
 
-void Controller::wholeFileToDisk(string, int, MasterBlock &)
-{
-
-}
-
 void Controller::updateMasterBlock(string filename, MasterBlock &master)
 {
     FILE* dbFile = fopen(filename.c_str(),"r+b");
@@ -71,10 +66,10 @@ list<TableDefinition> Controller::readTableList(string filename, MasterBlock &ma
 list<FieldDefinition> Controller::readFieldList(string filename, MasterBlock &master, TableDefinition& table)
 {
     list<FieldDefinition> fields;
-    //assuming masterblock and table have both accurate data
+
     FILE* dbFile = fopen(filename.c_str(), "rb");
     fseek(dbFile, table.getFirstFieldBlock()*master.getBlockSize(), SEEK_SET);
-    qDebug() << "Does position look good? " << ftell(dbFile);
+
     char* block = new char[master.getBlockSize()];
     int nFields;
     int next;
@@ -90,11 +85,6 @@ list<FieldDefinition> Controller::readFieldList(string filename, MasterBlock &ma
         f.fromByteArray(fblock, fsize);
         fields.push_back(f);
     }
-    delete[] fblock;
-    //seek the file to the block indicated by table
-    //load the block to memory
-    //skip first 12 bytes
-    //prepare a list for further return to the caller
     delete[] block;
     fclose(dbFile);
     return fields;
@@ -141,7 +131,6 @@ bool Controller::doesTableExist(string filename, string tableName, MasterBlock &
 {
     char* block = new char[master.getBlockSize()];
     int tableIndex = master.getFirstDefTableBlock();
-    cout << "\ntableIndex is " << tableIndex;
     qDebug() << "tableIndex is " << tableIndex;
     if(tableIndex == -1) return false;
     bool found = false;
@@ -155,11 +144,7 @@ bool Controller::doesTableExist(string filename, string tableName, MasterBlock &
         qDebug() << "Number of Tables is: " << numberOfTables;
         memcpy(&tableIndex, &block[4], 4);
         qDebug() << "tableIndex is: " << tableIndex;
-        //next 4 bytes are the size of the tables it would be 8
-        //TableDefinitionStrcture is
-        //int int int int int int char
-        //that give 7*4=28bytes to skip until the name. That would be 8+28=36
-        //so iteration will go block[36+74*i]
+
         char test[50];
         for(int i  = 0; i < numberOfTables; i++){
             memcpy(test, &block[36+74*i], 50);
@@ -173,10 +158,7 @@ bool Controller::doesTableExist(string filename, string tableName, MasterBlock &
             if(found) break;
         }
     }
-    //read the given block index
-    //read the nextIndex and store
-    //read the number of tables and store it
-    //read the corresponding 50 bytes in a cycle
+
     fclose(dbFile);
     delete[] block;
     qDebug() << "Was the table already stored? " << found;
@@ -221,8 +203,6 @@ int Controller::writeTableDefinition(string filename, MasterBlock &master, Table
          int nTables = 0;
          memcpy(&nTables, tBlock, 4);
 
-         //goven the number of tables, check if there is room
-         //compare with the max
          int header = 12;
          int maxTables = (master.getBlockSize()-header)/TableDefinition::getSize();
          if(nTables <= maxTables){
@@ -264,8 +244,7 @@ int Controller::writeTableDefinition(string filename, MasterBlock &master, Table
 
 void Controller::writeFieldsDefinition(string filename, MasterBlock &master, list<FieldDefinition> list, TableDefinition& table)
 {
-    //check masterblock
-    //store the nextavailable space using the blockCount
+
     char* block = new char[master.getBlockSize()];
 
     int numberOfBlocks = master.getNumberOfBlocks()+1;
@@ -310,6 +289,11 @@ void Controller::writeFieldsDefinition(string filename, MasterBlock &master, lis
 
     if(updateNeeded)
         updateMasterBlock(filename, master);
+}
+
+void Controller::writeRecords(string filename, MasterBlock &master, TableDefinition &table, list<FieldDefinition> fDef, list<list<string> > &records, int sizeOfRecords)
+{
+
 }
 
 void Controller::updateCurrentTableBlock(string filename, MasterBlock &master, TableDefinition &table)

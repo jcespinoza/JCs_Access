@@ -81,6 +81,15 @@ void QIntermediate::changeTableName(QString tableName)
     table.setName(tableName.toStdString());
 }
 
+int QIntermediate::computeRecordSize()
+{
+    int size = 0;
+    for(int i = 0; i < fieldsDef.count(); i++){
+        size += fieldsDef.at(i).getFieldSize();
+    }
+    return size;
+}
+
 void QIntermediate::createDataBaseFile(QString filename, QString dbName)
 {
     masterBlock.setName(dbName.toStdString());
@@ -112,9 +121,24 @@ void QIntermediate::updateCurrentTableBlock()
     engine.updateCurrentTableBlock(getActiveFile().toStdString(), masterBlock, table);
 }
 
-void QIntermediate::saveRecords(QTableWidget *)
+void QIntermediate::saveRecords(QTableWidget *tw)
 {
-
+    int oldRecords = table.getNDataRecords();
+    int newRecords = tw->rowCount()-oldRecords;
+    //assume the number is reasonably low for now   
+    int sizeOfRecord = computeRecordSize();
+    list< list<string> > records;
+    for(int i = oldRecords; i < tw->rowCount(); i++){
+        list<string> rowData;
+        for(int j = 0; j < tw->columnCount(); j++){
+            rowData.push_back(tw->item(i,j)->text().toStdString());
+            qDebug() << "Appending " << tw->item(i,j)->text();
+        }
+        records.push_back(rowData);
+    }
+    qDebug() << "Do they match?" << newRecords << "and" << records.size();
+    engine.writeRecords(getActiveFile().toStdString(), masterBlock, table, fieldsDef.toStdList(), records, sizeOfRecord);
+    qDebug() << "Ready for storing";
 }
 
 void QIntermediate::loadRecords(QTableWidget *)
@@ -166,15 +190,19 @@ bool QIntermediate::validateRow(QTableWidget *tw)
     int faults = 0;
     int row = tw->rowCount()-1;
     qDebug() << "rowCount is" << row+1;
-    for(int col = 0; col < tw->columnCount(); col++){
+    for(int col = 0; col < tw->columnCount() && row < tw->rowCount(); col++){
         int maxLenght = fieldsDef.at(col).getFieldSize();
+        if(!tw->item(row,col)){
+            faults++;
+            break;
+        }
         QString text = tw->item(row,col)->text();
         if(fieldsDef.at(col).getFieldType() == 0){
             int pos(0);
-            if(intVal->validate(text,pos)==QValidator::Invalid)
+            if(text.isEmpty() || intVal->validate(text,pos)==QValidator::Invalid)
                 faults++;
         }else{
-            if(strVal->validate(text, maxLenght) == QValidator::Invalid)
+            if(text.isEmpty()|| strVal->validate(text, maxLenght) == QValidator::Invalid)
                 faults++;
         }
     }
@@ -184,6 +212,7 @@ bool QIntermediate::validateRow(QTableWidget *tw)
 void QIntermediate::disableRow(QTableWidget *tw)
 {
     int row = tw->rowCount()-1;
+    if(row < 0) return;
     for(int col = 0; col < tw->columnCount(); col++){
         tw->item(row,col)->setFlags(Qt::NoItemFlags);
     }

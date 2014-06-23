@@ -237,7 +237,19 @@ void MWindow::on_pbAddRow_clicked()
 
 void MWindow::on_pbSaveRecords_clicked()
 {
-    handler.saveRecords(ui->twData);
+    if(ui->twData->rowCount() < 1)
+        return;
+    else{
+        if(handler.validateRow(ui->twData)){
+            handler.disableRow(ui->twData);
+        }else{
+            QMessageBox::warning(this, "Datos Invalidos", "Al menos uno de los campos no cumple con la definicion. Por favor verifique los datos");
+            return;
+        }
+    }
+    if(ui->twData->rowCount() > 0){
+        handler.saveRecords(ui->twData);
+    }
 }
 
 void MWindow::on_pbDiscardRecords_clicked()
