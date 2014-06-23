@@ -293,7 +293,62 @@ void Controller::writeFieldsDefinition(string filename, MasterBlock &master, lis
 
 void Controller::writeRecords(string filename, MasterBlock &master, TableDefinition &table, list<FieldDefinition> fDef, list<list<string> > &records, int sizeOfRecords)
 {
+    int fsize(4);
+    int ftype(0);
+    qDebug() << "REcords size:" << sizeOfRecords;
+    int indexData = table.getActiveDataBlock();
+    int nBlocks = master.getNumberOfBlocks()+1;
+    int oRecords = table.getNDataRecords();
+    int nRecords = records.size();
+    bool updateNeeded = false;
+    FILE* dbFile = fopen(filename.c_str(), "r+b");
+    if(indexData == -1){//it's the first one
+        char* block = new char[master.getBlockSize()];
+        //table.setActiveDataBlock(nBlocks);
+        memcpy(block, &nRecords, 4);
+        memcpy(&block[4], &indexData, 4);
+        memcpy(&block[8], &sizeOfRecords, 4);
 
+        int i = 0;
+        for(list<list<string> >::iterator it = records.begin(); it != records.end(); ++it){
+            char* rowBlock = new char[sizeOfRecords];
+            int wIndex = 0;
+            list<string>::iterator ut;
+            list<FieldDefinition>::iterator ft;
+            for(ut = (*it).begin(), ft = fDef.begin(); ut != (*it).end() && ft != fDef.end(); ++ut, ++ft){
+                qDebug() << "field " << QString::fromStdString((*ft).getFieldName());
+                int fsize = (*ft).getFieldSize();
+                int ftype = (*ft).getFieldType();
+                qDebug() << "column " << QString::fromStdString((*ut));
+                if(ftype == 0){
+                    int value = atoi((*ut).c_str());
+                    memcpy(&block[wIndex], &value,4);
+                }else{
+                    memcpy(&block[wIndex], (*ut).c_str(), fsize);
+                }
+                wIndex += fsize;
+            }
+            memcpy(&block[12+i*sizeOfRecords], rowBlock, sizeOfRecords);
+            delete[] rowBlock;
+            i++;
+        }
+        //fseek(dbFile,nBlocks*master.getBlockSize(), SEEK_SET );
+        //fwrite(block, 1, master.getBlockSize(), dbFile);
+        //master.incrementBlockCount();
+        //master.setNumberOfDataBlocks(master.getNumberOfDataBlocks()+1);
+        delete[] block;
+    }else{
+        while(indexData != 1){
+
+        }
+    }
+    fclose(dbFile);
+    /*
+    if(table.getFirstDataBlock() == -1)
+        table.setFirstDataBlock(nBlocks);
+    if(updateNeeded)
+        updateMasterBlock(filename, master);
+    */
 }
 
 void Controller::updateCurrentTableBlock(string filename, MasterBlock &master, TableDefinition &table)
