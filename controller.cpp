@@ -332,7 +332,7 @@ void Controller::writeRecords(string filename, MasterBlock &master, TableDefinit
             delete[] rowBlock;
             i++;
         }
-        //fseek(dbFile,nBlocks*master.getBlockSize(), SEEK_SET );
+        //fseek(dbFile,nBlocks*master.getBlockSize()+sizeOfRecords*oRecords, SEEK_SET );
         //fwrite(block, 1, master.getBlockSize(), dbFile);
         //master.incrementBlockCount();
         //master.setNumberOfDataBlocks(master.getNumberOfDataBlocks()+1);
