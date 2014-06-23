@@ -1,6 +1,7 @@
 #ifndef QINTERMEDIATE_H
 #define QINTERMEDIATE_H
 #include "controller.h"
+#include "qstringvalidator.h"
 #include <QList>
 #include <QTableWidget>
 #include <QWidget>
@@ -16,6 +17,8 @@ public:
     QList<QString> getFields(QWidget *parent);
     void clearWidget(QTableWidget*);
     void loadFieldDefinitionsIntoHeader(QTableWidget*);
+    bool validateRow(QTableWidget*);
+    void disableRow(QTableWidget*);
 
     QString getActiveFile(){return activeFile;}
     void setActiveFile(QString);
@@ -29,6 +32,7 @@ public:
     void dontAllowMoreKeyFields(){keyWasSelected = true;}
     void allowKeyFields(){keyWasSelected = false;}
     bool canAcceptKeyFields()const{return !keyWasSelected;}
+    void setValidatorMaxLenght(int max);
     void resetHandlerState();
     void changeTableName(QString);
 
@@ -39,6 +43,8 @@ public:
     int writeTableDefinition();
     void writeFieldDefinitions();
     void updateCurrentTableBlock();
+    void saveRecords(QTableWidget*);
+    void loadRecords(QTableWidget*);
 
 private:
     Controller engine;
@@ -48,6 +54,8 @@ private:
     TableDefinition table;
     QList<FieldDefinition> fieldsDef;
     bool keyWasSelected;
+    QIntValidator* intVal;
+    QStringValidator* strVal;
 
 signals:
 

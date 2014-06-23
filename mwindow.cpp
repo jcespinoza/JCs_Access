@@ -220,3 +220,27 @@ void MWindow::on_actionCerrar_Tabla_triggered()
     //Ask to save changes
     showStatistics();
 }
+
+void MWindow::on_pbAddRow_clicked()
+{
+    if(ui->twData->rowCount() < 1){
+        ui->twData->insertRow(ui->twData->rowCount());
+    }else{
+        if(handler.validateRow(ui->twData)){
+            handler.disableRow(ui->twData);
+            ui->twData->insertRow(ui->twData->rowCount());
+        }else{
+            QMessageBox::warning(this, "Datos Invalidos", "Al menos uno de los campos no cumple con la definicion. Por favor verifique los datos");
+        }
+    }
+}
+
+void MWindow::on_pbSaveRecords_clicked()
+{
+    handler.saveRecords(ui->twData);
+}
+
+void MWindow::on_pbDiscardRecords_clicked()
+{
+    //Check whether there is at least one record
+}

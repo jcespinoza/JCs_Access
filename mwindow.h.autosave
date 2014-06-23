@@ -46,6 +46,8 @@ private slots:
 
     void on_pbSaveRecords_clicked();
 
+    void on_pbDiscardRecords_clicked();
+    
 private:
     Ui::MWindow *ui;
     QIntermediate handler;

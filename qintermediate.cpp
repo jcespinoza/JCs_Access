@@ -9,6 +9,8 @@ QIntermediate::QIntermediate(QWidget *parent) :
     QWidget(parent)
 {
     keyWasSelected = false;
+    intVal = new QIntValidator(this);
+    strVal = new QStringValidator(this);
 }
 
 QString QIntermediate::getAFilename(QWidget*parent, QString message, int type, bool &ok)
@@ -60,6 +62,11 @@ int QIntermediate::retrieveTableFromDisk(QString tName)
     return engine.readTableDefinition(getActiveFile().toStdString(), masterBlock, table, tName.toStdString());
 }
 
+void QIntermediate::setValidatorMaxLenght(int max)
+{
+    strVal->setMaxLenght(max);
+}
+
 void QIntermediate::resetHandlerState()
 {
     allowKeyFields();
@@ -105,6 +112,16 @@ void QIntermediate::updateCurrentTableBlock()
     engine.updateCurrentTableBlock(getActiveFile().toStdString(), masterBlock, table);
 }
 
+void QIntermediate::saveRecords(QTableWidget *)
+{
+
+}
+
+void QIntermediate::loadRecords(QTableWidget *)
+{
+
+}
+
 QList<QString> QIntermediate::getFields(QWidget *parent)
 {
     QList<QString> fieldList;
@@ -132,14 +149,44 @@ void QIntermediate::loadFieldDefinitionsIntoHeader(QTableWidget *tw)
         tw->removeRow(tw->rowCount()-1);
     tw->setRowCount(0);
     tw->setColumnCount(0);
+
     QStringList headerLabels;
     for(int i = 0; i < fieldsDef.count(); i++){
         QString h = QString::fromStdString(fieldsDef.at(i).getFieldName());
+        h.append(" (").append(QString::number(fieldsDef.at(i).getFieldSize())).append(")");
         headerLabels.append(h);
         tw->insertColumn(i);
     }
     tw->setHorizontalHeaderLabels(headerLabels);
     tw->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+}
+
+bool QIntermediate::validateRow(QTableWidget *tw)
+{
+    int faults = 0;
+    int row = tw->rowCount()-1;
+    qDebug() << "rowCount is" << row+1;
+    for(int col = 0; col < tw->columnCount(); col++){
+        int maxLenght = fieldsDef.at(col).getFieldSize();
+        QString text = tw->item(row,col)->text();
+        if(fieldsDef.at(col).getFieldType() == 0){
+            int pos(0);
+            if(intVal->validate(text,pos)==QValidator::Invalid)
+                faults++;
+        }else{
+            if(strVal->validate(text, maxLenght) == QValidator::Invalid)
+                faults++;
+        }
+    }
+    return faults == 0;
+}
+
+void QIntermediate::disableRow(QTableWidget *tw)
+{
+    int row = tw->rowCount()-1;
+    for(int col = 0; col < tw->columnCount(); col++){
+        tw->item(row,col)->setFlags(Qt::NoItemFlags);
+    }
 }
 
 void QIntermediate::setActiveFile(QString filename)

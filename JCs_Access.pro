@@ -29,7 +29,8 @@ HEADERS  += mwindow.h \
     GeneralHashFunctions.h \
     masterblock.h \
     tabledefinition.h \
-    fielddefinition.h
+    fielddefinition.h \
+    qstringvalidator.h
 
 FORMS    += mwindow.ui \
     addfieldsdialog.ui

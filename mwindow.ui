@@ -424,7 +424,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pbAddRow">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -435,6 +435,32 @@
       </property>
       <property name="text">
        <string>Agregar Registro</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbSaveRecords">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>360</y>
+        <width>141</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Guardar Registros</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbDiscardRecords">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>360</y>
+        <width>141</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Descartar Cambios</string>
       </property>
      </widget>
     </widget>
