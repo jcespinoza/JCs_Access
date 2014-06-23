@@ -59,6 +59,7 @@ void QIntermediate::retrieveFieldDefinitionsFromDisk()
 
 int QIntermediate::retrieveTableFromDisk(QString tName)
 {
+    qDebug() << "Request table " << tName;
     return engine.readTableDefinition(getActiveFile().toStdString(), masterBlock, table, tName.toStdString());
 }
 
