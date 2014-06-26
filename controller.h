@@ -27,6 +27,7 @@ public:
     int writeTableDefinition(string filename, MasterBlock& master, TableDefinition& table);
     void writeFieldsDefinition(string filename, MasterBlock &, list<FieldDefinition>, TableDefinition &);
     void writeRecords(string filename, MasterBlock&, TableDefinition&, list<FieldDefinition>, list<list<string> >&, int);
+    void loadRecords(string filename,MasterBlock&, TableDefinition&, list<FieldDefinition>, list<list<string> >&, int);
     void updateCurrentTableBlock(string filename, MasterBlock&, TableDefinition&);
 
 private:
