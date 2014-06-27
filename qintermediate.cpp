@@ -23,7 +23,7 @@ QString QIntermediate::getAFilename(QWidget*parent, QString message, int type, b
         ans = QFileDialog::getSaveFileName(parent, message, QString(), "DataBase File (*.accdb)",0,0);
     else if(type == OPEN)
         ans = QFileDialog::getOpenFileName(parent, message, QString(), "DataBase File (*.accdb)",0,0);
-    ok != ans.isNull();
+    ok = !ans.isNull();
 
     return ans;
 }
@@ -144,7 +144,20 @@ void QIntermediate::saveRecords(QTableWidget *tw)
 
 void QIntermediate::loadRecords(QTableWidget *)
 {
-
+    int sizeOfRecords = computeRecordSize();
+    list< list<string> > records;
+    engine.loadRecords(getActiveFile().toStdString(), masterBlock, table, fieldsDef.toStdList(), records, sizeOfRecords);
+    list< list<string> >::iterator rit;
+    for(rit = records.begin(); rit != records.end(); ++rit){
+        qDebug() << "::BeginRecord::";
+        list<string> record = *(rit);
+        list<string>::iterator fit;
+        for(fit = record.begin(); fit != record.end(); ++fit){
+            QString field((*(fit)).c_str());
+            qDebug() << field;
+        }
+        qDebug() << "::EndRecord::";
+    }
 }
 
 QList<QString> QIntermediate::getFields(QWidget *parent)

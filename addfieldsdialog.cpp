@@ -26,6 +26,7 @@ void AddFieldsDialog::on_buttonBox_accepted()
 
 void AddFieldsDialog::on_cboFieldType_currentIndexChanged(int index)
 {
+    Q_UNUSED(index)
     if(ui->cboFieldType->currentIndex() == 0){
         type = 0;
         ui->leFieldSize->setText("4");

@@ -8,6 +8,7 @@ class QStringValidator : public QValidator {
    Q_OBJECT
 public:
     explicit QStringValidator(QObject* parent = 0){
+        Q_UNUSED(parent)
         maxLenght = 50;
     }
 

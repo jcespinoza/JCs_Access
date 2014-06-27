@@ -1,4 +1,5 @@
 #include "controller.h"
+#include <sstream>
 #include <QDebug>
 #include <iostream>
 //using namespace std;
@@ -12,7 +13,7 @@ void Controller::updateMasterBlock(string filename, MasterBlock &master)
     FILE* dbFile = fopen(filename.c_str(),"r+b");
     char* block = new char[master.getBlockSize()];
     master.toByteArray(block, master.getBlockSize());
-    int res = fwrite(block, 1, master.DEFAULT_BLOCKSIZE, dbFile);
+    fwrite(block, 1, master.DEFAULT_BLOCKSIZE, dbFile);
     fclose(dbFile);
     delete[] block;
 }
@@ -21,7 +22,7 @@ void Controller::readMasterBlock(string filename, MasterBlock &master)
 {
     FILE* dbFile = fopen(filename.c_str(),"rb");
     char* block = new char[MasterBlock::DEFAULT_BLOCKSIZE];
-    int res = fread(block, 1, MasterBlock::DEFAULT_BLOCKSIZE, dbFile);
+    fread(block, 1, MasterBlock::DEFAULT_BLOCKSIZE, dbFile);
     master.fromByteArray(block, MasterBlock::DEFAULT_BLOCKSIZE);
     fclose(dbFile);
     delete[] block;
@@ -32,7 +33,7 @@ void Controller::createNewFile(string filename, MasterBlock& master, int blockSi
     FILE* dbFile = fopen(filename.c_str(),"wb");
     char* block = new char[blockSize];
     master.toByteArray(block, blockSize);
-    int res = fwrite(block, 1, master.DEFAULT_BLOCKSIZE, dbFile);
+    fwrite(block, 1, master.DEFAULT_BLOCKSIZE, dbFile);
     fclose(dbFile);
     delete[] block;
 }
@@ -122,6 +123,7 @@ int Controller::readTableDefinition(string filename, MasterBlock &master, TableD
 
 void Controller::readDataBlock(string filename, MasterBlock &master, int blockID, char* dest)
 {
+    Q_UNUSED(blockID)
     FILE* dbFile = fopen(filename.c_str(), "rb");
     fread(dest, 1, master.getBlockSize(), dbFile);
     fclose(dbFile);
@@ -414,32 +416,54 @@ void Controller::writeRecords(string filename, MasterBlock &master, TableDefinit
         updateMasterBlock(filename, master);
 }
 
-void Controller::loadRecords(string filename, MasterBlock &, TableDefinition &, list<FieldDefinition>, list<list<string> > &, int)
+void Controller::loadRecords(string filename, MasterBlock &master, TableDefinition &table, list<FieldDefinition>fDef, list<list<string> > &records, int sizeOfRecords)
 {
-    /*
-    for(int i = oRecords; i < records.size(); i++){
-        char* rBlock =new char[sizeOfRecords];
-        int wIndex = 0;
-        memcpy(rBlock, &block[12+i*sizeOfRecords],sizeOfRecords);
-        list<FieldDefinition>::iterator ft;
-        for(ft = fDef.begin(); ft != fDef.end(); ++ft){
-            fsize = (*ft).getFieldSize();
-            ftype = (*ft).getFieldType();
-            if(ftype == 0){
-                int value(0);
-                memcpy(&value, &rBlock[wIndex],4);
-                qDebug() << "Val: " << value;
-            }else{
-                char*str = new char[fsize];
-                memcpy(str, &rBlock[wIndex],fsize);
-                qDebug() << "Str: " << str;
-                delete[] str;
+    int fsize(4);
+    int ftype(0);
+    int indexData = table.getFirstDataBlock();
+    FILE* dbFile = fopen(filename.c_str(), "rb");
+    char* block = new char[master.getBlockSize()];
+    while(indexData != -1){
+        int nRecords = 0;
+        fseek(dbFile, indexData*master.getBlockSize(), SEEK_SET);
+        fread(block, 1, master.getBlockSize(), dbFile);
+
+        memcpy(&nRecords, block, 4);
+        memcpy(&indexData, &block[4], 4);
+
+        for(int i = 0; i < nRecords; i++){
+            char* rBlock =new char[sizeOfRecords];
+            list<string> record;
+            int wIndex = 0;
+            memcpy(rBlock, &block[12+i*sizeOfRecords], sizeOfRecords);
+            list<FieldDefinition>::iterator ft;
+            for(ft = fDef.begin(); ft != fDef.end(); ++ft){
+                fsize = (*ft).getFieldSize();
+                ftype = (*ft).getFieldType();
+                string field;
+                if(ftype == 0){
+                    int value(0);
+                    memcpy(&value, &rBlock[wIndex],4);
+                    stringstream ss;
+                    ss << value;
+                    field = ss.str();
+
+                }else{
+                    char*str = new char[fsize];
+                    memcpy(str, &rBlock[wIndex],fsize);
+                    field = string(str);
+                    delete[] str;
+                }
+                record.push_back(field);
+                wIndex += fsize;
             }
-            wIndex += fsize;
+            records.push_back(record);
+            delete[] rBlock;
         }
-        delete[] rBlock;
+
     }
-    */
+    delete[] block;
+    fclose(dbFile);
 }
 
 void Controller::updateCurrentTableBlock(string filename, MasterBlock &master, TableDefinition &table)

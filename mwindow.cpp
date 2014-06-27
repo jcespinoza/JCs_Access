@@ -42,6 +42,7 @@ void MWindow::showDataPanel()
 {
     handler.retrieveFieldDefinitionsFromDisk();
     handler.loadFieldDefinitionsIntoHeader(ui->twData);
+    handler.loadRecords(ui->twData);
     ui->lbTableName->setText(handler.getActiveTableName());
     ui->stackedWidget->setCurrentWidget(ui->pgData);
 }
